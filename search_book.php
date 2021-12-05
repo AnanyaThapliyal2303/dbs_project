@@ -5,9 +5,9 @@
   margin-bottom:3vh;
   }
 </style>
-
+<br><br>
 <?php
-
+  
   $text = trim($_POST['text']);
   require_once "./functions/database_functions.php";
   $conn = db_connect();
@@ -24,7 +24,7 @@
     $number=mysqli_num_rows($result);
    echo  '<div class="alert alert-success" role="success"> ';
    echo $number;
-   echo ' Book/s Found</div>' . ' <div class="search_top" >       
+   echo ' Book/s Found</div>' . ' <div class="search_top" >
 </div>';
 
   }

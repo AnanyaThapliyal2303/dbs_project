@@ -22,6 +22,9 @@
   require "./header.php";
 ?>
       <!-- Example row of columns -->
+      <br>
+      <br>
+      <br>
       <p class="lead" style="margin: 25px 0"><a href="books.php">Books</a> > <?php echo $row['title']; ?></p>
       <div class="row">
         <div class="col-md-3 text-center">

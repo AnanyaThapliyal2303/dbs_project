@@ -1,9 +1,9 @@
 <?php
 	session_start();
 	require_once "./functions/database_functions.php";
-	// get pubid
-	if(isset($_GET['catid'])){
-		$catid = $_GET['catid'];
+	// get category id
+	if(isset($_GET['c_id'])){
+		$c_id = $_GET['c_id'];
 	} else {
 		echo "Wrong query! Check again!";
 		exit;
@@ -11,7 +11,7 @@
 
 	// connect database
 	$conn = db_connect();
-	$catName = getCatName($conn, $catid);
+	$cname = getCatName($conn, $c_id);
 
 	$query = "SELECT ISBN, title, book_img FROM books WHERE c_id = '$c_id'";
 	$result = mysqli_query($conn, $query);
@@ -25,9 +25,9 @@
 	}
 
 	$title = "Books Per Category";
-	require "./template/header.php";
+	require "./header.php";
 ?>
-	<p class="lead"><a href="category_list.php">Categories</a> > <?php echo $catName; ?></p>
+	<p class="lead"><a href="category_list.php">Categories</a> > <?php echo $cname; ?></p>
 	<?php while($row = mysqli_fetch_assoc($result)){
 ?>
 	<div class="row">
@@ -43,5 +43,4 @@
 <?php
 	}
 	if(isset($conn)) { mysqli_close($conn);}
-	require "./template/footer.php";
 ?>

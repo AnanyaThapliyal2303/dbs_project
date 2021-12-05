@@ -5,6 +5,10 @@
   z-index: 999;
 }
 
+#fixednavbar{
+  position: fixed;
+}
+
 *{
     margin: 0px;
     padding: 0px;
@@ -167,7 +171,7 @@ body{
 
   <body>
 
-    <nav class="navbar-fixed-top"  style="background-color: #00004d;"  >
+     <nav class="navbar-fixed-top" id="fixednavbar"  style="background-color: #00004d;"  >
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">

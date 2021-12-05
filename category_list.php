@@ -1,9 +1,13 @@
+<style>
+
+</style>
+
 <?php
 	session_start();
 	require_once "./functions/database_functions.php";
 	$conn = db_connect();
 
-	$query = "SELECT * FROM category ORDER BY category_name";
+	$query = "SELECT * FROM category ORDER BY cname";
 	$result = mysqli_query($conn, $query);
 	if(!$result){
 		echo "Can't retrieve data " . mysqli_error($conn);
@@ -15,28 +19,28 @@
 	}
 
 	$title = "List Of Categories";
-	require "./template/header.php";
+	require "./header.php";
 ?>
 	<p class="lead">List of Category</p>
 	<ul>
 	<?php 
 		while($row = mysqli_fetch_assoc($result)){
 			$count = 0; 
-			$query = "SELECT categoryid FROM books";
+			$query = "SELECT c_id FROM books";
 			$result2 = mysqli_query($conn, $query);
 			if(!$result2){
 				echo "Can't retrieve data " . mysqli_error($conn);
 				exit;
 			}
 			while ($pubInBook = mysqli_fetch_assoc($result2)){
-				if($pubInBook['categoryid'] == $row['categoryid']){
+				if($pubInBook['c_id'] == $row['c_id']){
 					$count++;
 				}
 			}
 	?>
 		<li>
-			<span class="badge"><?php echo $count; ?></span>
-		    <a href="bookPerCat.php?catid=<?php echo $row['categoryid']; ?>"><?php echo $row['category_name']; ?></a>
+			<span id="number-badge" class="badge"><?php echo $count; ?></span>
+		    <a id="category-name" href="bookPerCat.php?c_id=<?php echo $row['c_id']; ?>"><?php echo $row['cname']; ?></a>
 		</li>
 	<?php } ?>
 		<li>
@@ -45,5 +49,4 @@
 	</ul>
 <?php
 	mysqli_close($conn);
-	require "./template/footer.php";
 ?>
