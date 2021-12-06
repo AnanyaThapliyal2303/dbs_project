@@ -1,15 +1,73 @@
+<!DOCTYPE HTML>
+<style>
+	.table{
+		margin-top:10vh;
+		text-align:center;
+	}
+
+	.col{
+		font-size:30px;
+		padding:3rem;
+	}
+
+	.cartrow{
+		font-size:20px;
+	}
+
+	
+
+	button{
+		margin-top:2rem;
+		margin-left:23vw;
+	}
+	body{
+    background-image: linear-gradient(-225deg, #e3fdf5 0%, #ffe6fa 100%);
+        background-image: linear-gradient(to top, #f7f7f7 50%, #bbbbbb 100%);
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+	}
+
+	i{
+		cursor: pointer;
+	}
+
+	input{
+		border:none;
+		background-color:#f7f7f700;
+		width:3vw;
+		text-align:center;
+	}
+
+	#submit{
+		width:10vw;
+		margin-left:30vw;
+	}
+
+	i{
+		margin-right:1rem;
+	}
+</style>
+<body>
 <?php
 
 	session_start();
 	require_once "./functions/database_functions.php";
 	require_once "./functions/cart_functions.php";
+	require_once "./header.php";
+	
+if($_SESSION["user"]==true){
+
+}
+else{
+    header("Location:login.php");
+}
 	$conn = db_connect();
 	// book_isbn got from form post method, change this place later.
-	if(isset($_POST['bookisbn'])){
-		$book_isbn = $_POST['bookisbn'];
-	}
 
-	if(isset($book_isbn)){
+		$bookisbn = $_POST['bookisbn'];
+     
+		
+	if(isset($bookisbn)){
 		// new iem selected
 		if(!isset($_SESSION['cart'])){
 			// $_SESSION['cart'] is associative array that bookisbn => qty
@@ -19,111 +77,124 @@
 			$_SESSION['total_price'] = '0.00';
 		}
 
-		if(!isset($_SESSION['cart'][$book_isbn])){
-			$_SESSION['cart'][$book_isbn] = 1;
+		if(!isset($_SESSION['cart'][$bookisbn])){
+			$_SESSION['cart'][$bookisbn] = 1;
 		} elseif(isset($_POST['cart'])){
-			$_SESSION['cart'][$book_isbn]++;
+			$_SESSION['cart'][$bookisbn]++;
 			unset($_POST);
 		}
 	}
 
-	// if save change button is clicked , change the qty of each bookisbn
-	if(isset($_POST['save_change'])){
-		foreach($_SESSION['cart'] as $isbn =>$qty){
-			if($_POST[$isbn] == '0'){
-				unset($_SESSION['cart']["$isbn"]);
-			} else {
-				$_SESSION['cart']["$isbn"] = $_POST["$isbn"];
-			}
-		}
-	}
-
-	// print out header here
-	$title = "Your shopping cart";
-	require "./template/header.php";
-
-	if(isset($_SESSION['cart']) && (array_count_values($_SESSION['cart']))){
+	
+	
 		$_SESSION['total_price'] = total_price($_SESSION['cart']);
 		$_SESSION['total_items'] = total_items($_SESSION['cart']);
+		$final=0;
+		$total_items=0;
+		$item_names=' ';
+
+		$cust_id;
+		$email=$_SESSION["user"];
+		$sql="SELECT cust_id FROM `customer` WHERE email='$email'";
+		$result=$conn->query($sql);
+		{while($row=$result->fetch_assoc())
+		{
+		  $cust_id=$row['cust_id'];
+		}
+		}
+	
 ?>
-   	<form action="cart.php" method="post">
+<html>
+<div id="mycart">
+   	<form action="checkout.php" method="post">
 	   	<table class="table">
-	   		<tr>
-	   			<th>Item</th>
-	   			<th>Price</th>
-	  			<th>Quantity</th>
-	   			<th>Total</th>
-	   		</tr>
+			<thead>
+				<tr>
+					<th class="col">Item</th>
+					<th class="col">Price</th>
+					<th class="col">Quantity</th>
+					<th class="col">Total</th>
+				</tr>
+			</thead>
 	   		<?php
 		    	foreach($_SESSION['cart'] as $isbn => $qty){
 					$conn = db_connect();
 					$book = mysqli_fetch_assoc(getBookByIsbn($conn, $isbn));
+					if($qty==0)
+					{
+
+					}
+					else{
+
+				    $total_items=$total_items+$qty;
+					echo'<tr>';
+					echo'<td class="cartrow">'.$book['title'];
+				
+					$item_names .= $book['title'];
+					$item_names .= ",";
+					echo'<td class="cartrow">Rs. '.$book['price'];
+					echo'<td  class="cartrow"><i class="fa fa-plus" onclick="inc()" aria-hidden="true"></i>';
+ 					echo'<input type="text" value='.$qty.' id="quantity" readonly>';
+					echo'<i class="fa fa-minus" onclick="dec()" aria-hidden="true"></i></td>';
+					$total=$qty * $book['price'];
+					$final=$final+$total;
+					echo'<td class="cartrow">Rs. '.$total;
+					echo'</tr>';
+					}
+				
+			
+				}
+
+			
+				
 			?>
-			<tr>
-				<td><?php echo $book['title'] . " by " . $author['name']; ?></td>
-				<td><?php echo "$" . $book['price']; ?></td>
-				<td><input type="text" value="<?php echo $qty; ?>" size="2" name="<?php echo $isbn; ?>"></td>
-				<td><?php echo "$" . $qty * $book['price']; ?></td>
-			</tr>
-			<?php } ?>
-		    <tr>
-		    	<th>&nbsp;</th>
-		    	<th>&nbsp;</th>
-		    	<th><?php echo $_SESSION['total_items']; ?></th>
-		    	<th><?php echo "$" . $_SESSION['total_price']; ?></th>
-		    </tr>
-	   	</table>
-		   <button type="submit" class="btn btn-primary" name="save_change"><span class="glyphicon glyphicon-ok"></span>&nbsp;Save Changes</button>
+			</table>
+			<div style="text-align:center;">
+			<?php echo'<h2><i class="fa fa-shopping-cart"></i>: Rs. '.$final; ?>
+			</div>
+	<div>
+		<?php
+	      echo'<form action="checkout.php" method="post">';
+		  echo'<input type="hidden" name="quantity" value='.$total_items.'>';
+		  echo'<input type="hidden" name="total_price" value='.$final.'>';
+		  echo'<input type="hidden" name="cust_id" value='.$cust_id.'>';
+		  echo'<input type="hidden" name="items" value="'.$item_names.'">';
+		  echo'<br/>';
+		  echo'<input type="submit" id="submit" class="btn btn-primary" value="CHECKOUT" name="save_change">';
+		  echo'</form>';
+          
+
+
+			?>
+       
+   
 	  
+			</div> 
 	</form>
 	<br/><br/>
-	<a href="checkout.php" class="btn btn-primary">Go To Checkout</a> 
-	<a href="books.php" class="btn btn-primary">Continue Shopping</a>
-<?php
-	} else {
-		echo "<p class=\"text-warning\">Your cart is empty! Please make sure you add some books in it!</p>";
+	<div style="text-align:left;">
+	
+			</div>
+			<br/>
+	<a href="books.php"><h3><i class="fa fa-cart-plus"></i>Continue Shopping</h3></a>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	</div>
+</body>
+
+<script>
+	function inc(){
+		var elem = parseInt(document.getElementById('quantity').value);
+		document.getElementById('quantity').value=elem+1;
+	
 	}
-	if(isset($_SESSION['user'])){
-	$customer=getCustomerIdbyEmail($_SESSION['email']);
-	$customerid=$customer['id'];
-	$query="SELECT * FROM cart join cartitems join books join customers
-		on customers.id='$customerid' and cart.customerid='$customerid' and cart.id=cartitems.cartid and  cartitems.productid=books.book_isbn";
-	 $result=mysqli_query($conn,$query);
-	 if(mysqli_num_rows($result)!=0){
-	 echo '	<br><br><br><h4>Your Purchase History</h4><table class="table">
-	 <tr>
-		 <th>Item</th>
-		 <th>Quantity</th>
-		<th>Date</th>
-	 </tr>';
-		for($i = 0; $i < mysqli_num_rows($result); $i++){
-			
-			while($query_row = mysqli_fetch_assoc($result)){
-				echo '<tr>
-				<td>
-				<a href="book.php?bookisbn=';
-				echo $query_row['ISBN'];
-				echo '">';
-				echo '<img style="height:100px;width:80px"class="img-responsive img-thumbnail" src="./bootstrap/img/';
-				echo $query_row['book_img'];
-				echo '">';
-				echo ' </a>
-				</td>
-				<td>';
-				echo $query_row['quantity'];
-				echo '
-				</td>
-				<td>';
-				echo $query_row['date'];
-				echo'
-				</td>
-				</tr>';
-			}
-		}
-		echo '</table>';
+
+	function dec(){
+		var elem = parseInt(document.getElementById('quantity').value);
+		document.getElementById('quantity').value=elem-1;
+	
 	}
-}
-?>
-<?php	 
-	if(isset($conn)){ mysqli_close($conn); }
-	// require_once "./template/footer.php";?>
+</script>
+	</html>

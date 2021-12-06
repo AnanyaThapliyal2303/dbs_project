@@ -1,3 +1,14 @@
+<?
+session_start();
+
+if($_SESSION["user"]==true){
+
+}
+else{
+    header("Location:login.php");
+}
+?>
+
 <style>
     @import url('https://fonts.googleapis.com/css?family=Exo:400,700');
 
@@ -151,7 +162,7 @@ body{
     require_once "./functions/database_functions.php";
     if(isset($_SESSION['email'])){
       $customer = getCustomerIdbyEmail($_SESSION['email']);
-      $name=$customer['firstname'];
+      $name=$customer['name'];
     }
 ?>
 <!DOCTYPE html>
@@ -187,25 +198,26 @@ body{
             <form  method="post" action="search_book.php" class="col-md-6" style="margin-top:7px">
               <input type="text" class="form-control" id="inputPassword2" placeholder="Search By Keyword" name="text">
               <button type="submit" class="btn btn-primary mb-2" style="display:none"></button>
-           </form>
+           
+            </form>
           </div>
           </div>
         </div>
-
+      
         <!--/.navbar-collapse -->
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-              <!-- link to publiser_list.php -->
-              <li><a href="publisher_list.php"><span class="glyphicon glyphicon-paperclip"></span>&nbsp; Publishers</a></li>
-              
+         
+              <!-- link to category_list.php -->
               <li><a href="category_list.php"><span class="glyphicon glyphicon-list-alt"></span>&nbsp; Categories</a></li>
               <!-- link to books.php -->
               <li><a href="books.php"><span class="glyphicon glyphicon-book"></span>&nbsp; Books</a></li>
               <!-- link to shopping cart -->
+              <li><a href="orders.php"><span class="glyphicon glyphicon-list"></span>&nbsp; Orders</a></li>
               <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp; My Cart</a></li>
               <?php 
                if(isset($_SESSION['user'])){
-                 echo ' <li><a href="logout.php"><span class="	glyphicon glyphicon-log-out"></span>&nbsp; LogOut</a></li>'.'<li><a href="profile.php"><span class="glyphicon glyphicon-user"></span>&nbsp;'
+                 echo ' <li><a href="logout.php"><span class="	glyphicon glyphicon-log-out"></span>&nbsp; LogOut</a></li>'.'<li><a><span class="glyphicon glyphicon-user"></span>&nbsp;'
                  .$name.
                  '</a></li>';
                }else{

@@ -1,10 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+
 <style>
+
+body{
+  background-image: linear-gradient(-225deg, ##f7f7f7 0%, ##f7f7f7 100%);
+    background-image: linear-gradient(to top, #f7f7f7 50%, #f7f7f7 100%);
+}
+
 #img-size{
   height:40vh;
   width: 15vw;
   margin-bottom:3vh;
   }
 </style>
+<body>
 <br><br>
 <?php
   
@@ -50,5 +60,6 @@
 <?php
     }
   if(isset($conn)) { mysqli_close($conn); }
-  require_once "./footer.php";
 ?>
+</body>
+</html>

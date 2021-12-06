@@ -1,13 +1,14 @@
 <?php
 	$title = "User SignIn";
-	require_once "./template/header.php";
+	require_once "./header.php";
 ?>
-
+    <br>
+    <br>
+    <br>
 	<form class="form-horizontal" method="post" action="user_verify.php">
   <div class="form-group">
-    <label for="exampleInputEmail1">Username</label>
+    <label for="exampleInputEmail1">Email</label>
     <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter username" name="username">
-    <small class="form-text text-muted">We'll never share your email with anyone else.</small>
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Password</label>
@@ -33,6 +34,3 @@
     }
 ?>
 </div>
-<?php
-	require_once "./template/footer.php";
-?>

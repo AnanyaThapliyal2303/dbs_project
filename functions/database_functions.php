@@ -38,20 +38,20 @@ if (!function_exists("getBookByIsbn")){
 }
 if (!function_exists("getCartId")){
 	function getCartId($conn, $customerid){
-		$query = "SELECT id FROM cart WHERE customerid = '$customerid'";
+		$query = "SELECT cust_id FROM shopping_cart WHERE cust_id = '$cust_id'";
 		$result = mysqli_query($conn, $query);
 		if(!$result){
 			echo "retrieve data failed!" . mysqli_error($conn);
 			exit;
 		}
 		$row = mysqli_fetch_assoc($result);
-		return $row['id'];
+		return $row['cust_id'];
 	}
 }
 
 if (!function_exists("insertIntoCart")){
 	function insertIntoCart($conn, $customerid,$date){
-		$query = "INSERT INTO cart(customerid,date) VALUES('$customerid','$date') ";
+		$query = "INSERT INTO shopping_cart(cust_id,date) VALUES('$cust_id','$date') ";
 		$result = mysqli_query($conn, $query);
 		if(!$result){
 			echo "Insert Cart failed " . mysqli_error($conn);
@@ -62,39 +62,41 @@ if (!function_exists("insertIntoCart")){
 if (!function_exists("getbookprice")){
 	function getbookprice($isbn){
 		$conn = db_connect();
-		$query = "SELECT price FROM books WHERE ISBN = '$ISBN-'";
+		$query = "SELECT price FROM books WHERE ISBN = '$ISBN'";
 		$result = mysqli_query($conn, $query);
 		if(!$result){
 			echo "get book price failed! " . mysqli_error($conn);
 			exit;
 		}
 		$row = mysqli_fetch_assoc($result);
-		return $row['book_price'];
+		return $row['price'];
 	}
 }
+
 if (!function_exists("getCustomerId")){
-	function getCustomerId($name, $address, $city, $zip_code, $country){
+	function getCustomerId($name, $email, $phone){
 		$conn = db_connect();
-		$query = "SELECT customerid from customers WHERE 
+		$query = "SELECT cust_id from customer WHERE 
 		name = '$name' AND 
-		address= '$address' AND 
-		city = '$city' AND 
-		zip_code = '$zip_code' AND 
-		country = '$country'";
+		email = '$email' AND 
+		phone = '$phone'";
 		$result = mysqli_query($conn, $query);
-		// if there is customer in db, take it out
-		if($result){
+		/* if there is customer in db, take it out*/
+		if($result)
+		{
 			$row = mysqli_fetch_assoc($result);
-			return $row['customerid'];
-		} else {
+			return $row['cust_id'];
+		} else 
+		{
 			return null;
 		}
 	}
 }
+
 if (!function_exists("getCustomerIdbyEmail")){
 	function getCustomerIdbyEmail($email){
 		$conn = db_connect();
-		$query = "SELECT * from customers WHERE 
+		$query = "SELECT * from customer WHERE 
 		email = '$email'";
 		$result = mysqli_query($conn, $query);
 		// if there is customer in db, take it out
@@ -123,6 +125,7 @@ if (!function_exists("getPubName")){
 		return $row['pname'];
 	}
 }
+
 if (!function_exists("getCatName")){
 	function getCatName($conn, $c_id){
 		$query = "SELECT cname FROM category WHERE c_id = '$c_id'";

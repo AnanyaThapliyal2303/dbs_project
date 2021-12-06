@@ -1,3 +1,16 @@
+<!DOCTYPE HTML>
+<html>
+
+<style>
+
+body{
+  background-image: linear-gradient(-225deg, ##f7f7f7 0%, ##f7f7f7 100%);
+    background-image: linear-gradient(to top, #f7f7f7 50%, #f7f7f7 100%);
+}
+
+</style>
+
+<body>
 <?php
 	session_start();
 	require_once "./functions/database_functions.php";
@@ -27,6 +40,9 @@
 	$title = "Books Per Category";
 	require "./header.php";
 ?>
+	<br>
+	<br>
+	<br>
 	<p class="lead"><a href="category_list.php">Categories</a> > <?php echo $cname; ?></p>
 	<?php while($row = mysqli_fetch_assoc($result)){
 ?>
@@ -40,7 +56,9 @@
 		</div>
 	</div>
 	<br>
+</body>
 <?php
 	}
 	if(isset($conn)) { mysqli_close($conn);}
 ?>
+</html>

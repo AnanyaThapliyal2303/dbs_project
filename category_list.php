@@ -1,7 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+
 <style>
 
-</style>
+body{
+  background-image: linear-gradient(-225deg, ##f7f7f7 0%, ##f7f7f7 100%);
+    background-image: linear-gradient(to top, #f7f7f7 50%, #f7f7f7 100%);
+}
 
+.ul-category{
+	font-size:25px;
+	margin-left:29vw;
+	margin-top:5vh;
+}
+
+.lead{
+	text-align:center;
+}
+</style>
+<body>
 <?php
 	session_start();
 	require_once "./functions/database_functions.php";
@@ -21,8 +38,11 @@
 	$title = "List Of Categories";
 	require "./header.php";
 ?>
-	<p class="lead">List of Category</p>
-	<ul>
+	<br>
+	<br>
+	<br>
+	<p class="lead" style="font-size:30px">List of Category</p>
+	<ul class="ul-category">
 	<?php 
 		while($row = mysqli_fetch_assoc($result)){
 			$count = 0; 
@@ -47,6 +67,8 @@
 			<a href="books.php">List full of books</a>
 		</li>
 	</ul>
+</body>
 <?php
 	mysqli_close($conn);
 ?>
+</html>

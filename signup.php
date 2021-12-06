@@ -1,16 +1,14 @@
 <?php
 	$title = "User SignUp";
-	require_once "./template/header.php";
+	require_once "./header.php";
 ?>
-
+    <br>
+    <br>
+    <br>
 	<form class="form-horizontal" method="post" action="user_signup.php">
     <div class="form-group">
-        <label for="exampleInputEmail1">Firstname</label>
-        <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Firstname" name="firstname">
-    </div>
-    <div class="form-group">
-        <label for="exampleInputEmail1">Lastname</label>
-        <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Lastname" name="lastname">
+        <label for="exampleInputEmail1">Name</label>
+        <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="name" name="name">
     </div>
     <div class="form-group">
 
@@ -24,18 +22,6 @@
     <div class="form-group">
         <label for="inputAddress">Address</label>
         <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="address">
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-        <label for="inputCity">City</label>
-        <input type="text" class="form-control" id="inputCity" name="city">
-        </div>
-        <div class="form-group col-md-2">
-        </div>
-        <div class="form-group col-md-4">
-        <label for="inputZip">Zip</label>
-        <input type="text" class="form-control" id="inputZip" name="zipcode">
-        </div>
     </div>
     <div class="form-group col-md-12">
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -55,6 +41,3 @@
     }
 ?>
 </div>
-<?php
-	require_once "./template/footer.php";
-?>
